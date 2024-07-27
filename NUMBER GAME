@@ -1,0 +1,131 @@
+import java.util.*;
+
+
+public class Main {
+
+	public static int generateRandom(int min, int max)
+	{
+		return (int)((Math.random() * (max - min)) + min);
+	}
+	public static int[] game(int n,int randomnumber,int c)
+	{
+		int[] res=new int[2];
+
+		Scanner sc=new Scanner(System.in);
+		int i;
+
+		for ( i = 0; i < n; i++)
+		{
+
+			System.out.println("Guess the number :");
+			int guessednumber=sc.nextInt();
+			if((guessednumber<randomnumber) )
+			{
+				System.out.println("entered number is not a correct guess ,your guess is  less than  the generated number. ");
+			} else if ((guessednumber>randomnumber)  )
+			{
+				System.out.println("entered number is not a correct guess ,your guess is  greater than  the generated number. ");
+			}
+			else
+			{
+				System.out.println("you guessed the correct answer !");
+				c=1;
+
+				break;
+
+
+			}
+
+
+
+		}
+		if(i>=n)
+		{
+			System.out.println("you are out of attempts ! You did not guess the correct number ");
+
+		}
+		res[0]=i;
+		res[1]=c;
+
+		return res;
+
+	}
+	public static void displayanswer(int ans)
+	{
+		Scanner sc=new Scanner(System.in);
+		String inp;
+		System.out.print("Do you want to know the answer:(yes/no) : ");
+		inp = sc.nextLine().trim().toLowerCase();
+
+		if (inp.equals("yes"))
+		{
+			System.out.println("answer is :"+ans);
+		}
+		else if (inp.equals("no"))
+		{
+            System.out.println("gameover");
+
+		}
+		else
+		{
+			System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+		}
+	}
+	public static void main(String[] args)
+	{
+		int randomnumber=generateRandom(1,100);/*generating random number
+             with in a range of (1,100) ,we can change the range .*/
+	System.out.println(randomnumber);
+		int numberofattempts=5;
+
+		String input;
+		int round=0;
+		int attempts=0;
+		int score=0;
+		int correct=0;
+
+		do
+		{
+			round++;
+			int[] currentattempts=game(numberofattempts,randomnumber,correct);
+			correct=currentattempts[1];
+			attempts+=currentattempts[0];
+			if(currentattempts[0]<numberofattempts)
+			{
+				break;
+			}
+
+
+			Scanner sc=new Scanner(System.in);
+
+			System.out.print("Do you want to continue? (yes/no): ");
+			 input = sc.nextLine().trim().toLowerCase();
+
+			if (input.equals("yes"))
+			{
+				System.out.println("You chose to continue.");
+			}
+			else if (input.equals("no"))
+			{
+				System.out.println("You chose not to continue.");
+				displayanswer(randomnumber);
+			}
+			else
+			{
+				System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+			}
+
+
+		}while (input.equals("yes"));
+
+		if(correct==1)
+		{
+			attempts+=1;
+			score = (100 / attempts);
+
+
+		}
+
+     System.out.println("number of rounds played :"+round+",total number of attempts :"+attempts+",Total score :"+score);
+	}
+}

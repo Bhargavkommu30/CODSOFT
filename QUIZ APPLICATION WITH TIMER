@@ -1,0 +1,85 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
+class Question {
+	String question;
+	String[] options;
+	char correctAnswer;
+
+	public Question(String question, String[] options, char correctAnswer) {
+		this.question = question;
+		this.options = options;
+		this.correctAnswer = correctAnswer;
+	}
+}
+
+class Quiz {
+	List<Question> questions = new ArrayList<>();
+
+	public void addQuestion(Question question) {
+		questions.add(question);
+	}
+}
+
+class QuestionTimer {
+	private Timer timer;
+	private boolean timeUp;
+
+	public QuestionTimer(int seconds) {
+		timer = new Timer();
+		timeUp = false;
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				timeUp = true;
+				System.out.println("Time's up!");
+			}
+		}, seconds * 1000);
+	}
+
+	public boolean isTimeUp() {
+		return timeUp;
+	}
+
+	public void cancel() {
+		timer.cancel();
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		Quiz quiz = new Quiz();
+		quiz.addQuestion(new Question("What is the capital of France?", new String[]{"A) Berlin", "B) Madrid", "C) Paris", "D) Rome"}, 'C'));
+		quiz.addQuestion(new Question("What is 2 + 2?", new String[]{"A) 3", "B) 4", "C) 5", "D) 6"}, 'B'));
+		quiz.addQuestion(new Question("Who is the current Cm of Telangana?", new String[]{"A) KCR", "B) KTR", "C) Revanth Reddy", "D) Modi"}, 'C'));
+		quiz.addQuestion(new Question("What is the date on which Indepence day is celebrated?", new String[]{"A) Aug 15", "B) June 20", "C) Nov 14", "D) Jan 26"}, 'A'));
+
+		Scanner scanner = new Scanner(System.in);
+		int score = 0;
+
+		for (Question q : quiz.questions) {
+			System.out.println(q.question);
+			for (String option : q.options) {
+				System.out.println(option);
+			}
+
+			QuestionTimer timer = new QuestionTimer(10); // 10 seconds for each question
+			String answer = scanner.nextLine().toUpperCase();
+			timer.cancel();
+
+			if (!timer.isTimeUp() && answer.charAt(0) == q.correctAnswer) {
+				System.out.println("Answer is Correct ");
+				score++;
+			} else if (timer.isTimeUp()) {
+				System.out.println("You didn't answer in time!");
+			} else {
+				System.out.println("Wrong answer!");
+			}
+		}
+
+		System.out.println("Your final score is: " + score);
+	}
+}
